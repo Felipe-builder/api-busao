@@ -1,0 +1,11 @@
+{
+    "mysql": {
+        "banco-de-dados": "busao",
+        "usuario": "root",
+        "senha": "password",
+        "host": "127.0.0.1"
+    },
+    "api": {
+        "porta": "3000"
+    }
+}
