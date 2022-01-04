@@ -33,6 +33,25 @@ class Usuario {
         this.versao = encontrado.versao 
     }
 
+    async atualizar() {
+        await TabelaUsuario.pegarPorId(this.id)
+        const dadosParaAtualizar = {}
+        const campos = ['usuario', 'email', 'senha']
+
+        campos.forEach((campo) => {
+            const valor = this[campo]
+            if (typeof valor === 'string' && valor.length > 0) {
+                dadosParaAtualizar[campo] = valor
+            }
+        })
+
+        if (Object.keys(dadosParaAtualizar).length === 0) {
+            throw new Error('Dados não fornecidos para atualização!')
+        }
+
+        await TabelaUsuario.atualizar(this.id, dadosParaAtualizar)
+    }
+
 }
 
 module.exports = Usuario
