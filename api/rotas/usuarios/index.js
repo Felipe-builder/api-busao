@@ -1,9 +1,11 @@
 const roteador = require('express').Router()
+const NaoEncontrado = require('../../erros/NaoEncontrado')
 const TabelaUsuario = require('./TabelaUsuario')
 const Usuario = require('./Usuario')
 
 roteador.get('/', async (req, res) => {
     const resultados = await TabelaUsuario.listar()
+    res.status(200)
     res.send(
         JSON.stringify(resultados)
     )
@@ -19,6 +21,7 @@ roteador.post('/', async (req, res) => {
             JSON.stringify(usuario)
         )
     }catch (erro) {
+        res.status(400)
         res.send(
             JSON.stringify({
                 mensagem: erro.message
@@ -36,6 +39,7 @@ roteador.get('/:idUsuario', async (req, res) => {
             JSON.stringify(usuario)
         )
     } catch(erro) {
+        res.status(404)
         res.send(
             JSON.stringify({
                 mensagem: erro.message
@@ -44,7 +48,7 @@ roteador.get('/:idUsuario', async (req, res) => {
     }
 })
 
-roteador.put('/:idUsuario', async (req, res) => {
+roteador.put('/:idUsuario', async (req, res, proximo) => {
     try {
         const id = req.params.idUsuario
         const dadosRecebidos = req.body
@@ -54,11 +58,7 @@ roteador.put('/:idUsuario', async (req, res) => {
         res.status(204)
         res.end()
     } catch (erro) {
-        res.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
@@ -71,6 +71,7 @@ roteador.delete('/:idUsuario', async (req, res) => {
         res.status(204)
         res.end()
     } catch (erro) {
+        res.status(404)
         res.send(
             JSON.stringify({
                 mensagem: erro.message
