@@ -2,12 +2,16 @@ const roteador = require('express').Router()
 const NaoEncontrado = require('../../erros/NaoEncontrado')
 const TabelaUsuario = require('./TabelaUsuario')
 const Usuario = require('./Usuario')
+const SerializadorFornecedor = require('../../Serializador').SerializadorFornecedor
 
 roteador.get('/', async (req, res) => {
     const resultados = await TabelaUsuario.listar()
     res.status(200)
+    const serializador = new SerializadorFornecedor(
+        res.getHeader('Content-Type')
+    )
     res.send(
-        JSON.stringify(resultados)
+        serializador.serializar(resultados)
     )
 })
 
@@ -17,8 +21,11 @@ roteador.post('/', async (req, res, proximo) => {
         const usuario = new Usuario(dadosRecebidos)
         await usuario.criar()
         res.status(201)
+        const serializador = new SerializadorFornecedor(
+            res.getHeader('Content-Type')
+        )
         res.send(
-            JSON.stringify(usuario)
+            serializador.serializar(usuario)
         )
     }catch (erro) {
         proximo(erro)
@@ -30,8 +37,11 @@ roteador.get('/:idUsuario', async (req, res, proximo) => {
         const id = req.params.idUsuario
         const usuario = new Usuario({ id: id })
         await usuario.carregarPorId()
+        const serializador = new SerializadorFornecedor(
+            res.getHeader('Content-Type')
+        )
         res.send(
-            JSON.stringify(usuario)
+            serializador.serializar(usuario)
         )
     } catch(erro) {
         proximo(erro)

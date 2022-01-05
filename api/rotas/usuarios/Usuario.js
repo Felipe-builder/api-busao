@@ -60,7 +60,7 @@ class Usuario {
     }
 
     validar() {
-        const campos = ['empresa', 'email', 'categoria']
+        const campos = ['usuario', 'email', 'senha']
 
         campos.forEach(campo => {
             const valor = this[campo]
