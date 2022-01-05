@@ -1,3 +1,5 @@
+const CampoInvalido = require('../../erros/CampoInvalido')
+const DadosNaoFornecidos = require('../../erros/DadosNaoFornecidos')
 const TabelaUsuario = require('./TabelaUsuario')
 
 class Usuario {
@@ -47,7 +49,7 @@ class Usuario {
         })
 
         if (Object.keys(dadosParaAtualizar).length === 0) {
-            throw new Error('Dados não fornecidos para atualização!')
+            throw new DadosNaoFornecidos()
         }
 
         await TabelaUsuario.atualizar(this.id, dadosParaAtualizar)
@@ -64,7 +66,7 @@ class Usuario {
             const valor = this[campo]
 
             if(typeof valor !== 'string' || valor.length === 0) {
-                throw new Error(`O campo '${campo}' está inválido!`)
+                throw new CampoInvalido(campo)
             }
         })
     }

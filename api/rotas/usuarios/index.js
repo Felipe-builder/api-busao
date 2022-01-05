@@ -11,7 +11,7 @@ roteador.get('/', async (req, res) => {
     )
 })
 
-roteador.post('/', async (req, res) => {
+roteador.post('/', async (req, res, proximo) => {
     try {
         const dadosRecebidos = req.body;
         const usuario = new Usuario(dadosRecebidos)
@@ -21,16 +21,11 @@ roteador.post('/', async (req, res) => {
             JSON.stringify(usuario)
         )
     }catch (erro) {
-        res.status(400)
-        res.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
-roteador.get('/:idUsuario', async (req, res) => {
+roteador.get('/:idUsuario', async (req, res, proximo) => {
     try {
         const id = req.params.idUsuario
         const usuario = new Usuario({ id: id })
@@ -39,12 +34,7 @@ roteador.get('/:idUsuario', async (req, res) => {
             JSON.stringify(usuario)
         )
     } catch(erro) {
-        res.status(404)
-        res.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
@@ -62,7 +52,7 @@ roteador.put('/:idUsuario', async (req, res, proximo) => {
     }
 })
 
-roteador.delete('/:idUsuario', async (req, res) => {
+roteador.delete('/:idUsuario', async (req, res, proximo) => {
     try {
         const id = req.params.idUsuario
         const usuario = new Usuario({id: id})
@@ -71,12 +61,7 @@ roteador.delete('/:idUsuario', async (req, res) => {
         res.status(204)
         res.end()
     } catch (erro) {
-        res.status(404)
-        res.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
