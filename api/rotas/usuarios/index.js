@@ -2,12 +2,12 @@ const roteador = require('express').Router()
 const NaoEncontrado = require('../../erros/NaoEncontrado')
 const TabelaUsuario = require('./TabelaUsuario')
 const Usuario = require('./Usuario')
-const SerializadorFornecedor = require('../../Serializador').SerializadorFornecedor
+const SerializadorUsuario = require('../../Serializador').SerializadorUsuario
 
 roteador.get('/', async (req, res) => {
     const resultados = await TabelaUsuario.listar()
     res.status(200)
-    const serializador = new SerializadorFornecedor(
+    const serializador = new SerializadorUsuario(
         res.getHeader('Content-Type')
     )
     res.send(
@@ -21,7 +21,7 @@ roteador.post('/', async (req, res, proximo) => {
         const usuario = new Usuario(dadosRecebidos)
         await usuario.criar()
         res.status(201)
-        const serializador = new SerializadorFornecedor(
+        const serializador = new SerializadorUsuario(
             res.getHeader('Content-Type')
         )
         res.send(
@@ -37,8 +37,9 @@ roteador.get('/:idUsuario', async (req, res, proximo) => {
         const id = req.params.idUsuario
         const usuario = new Usuario({ id: id })
         await usuario.carregarPorId()
-        const serializador = new SerializadorFornecedor(
-            res.getHeader('Content-Type')
+        const serializador = new SerializadorUsuario(
+            res.getHeader('Content-Type'),
+            ['email', 'senha', 'dtCriacao', 'dtAtualizacao', 'versao']
         )
         res.send(
             serializador.serializar(usuario)
