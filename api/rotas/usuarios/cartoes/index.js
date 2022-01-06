@@ -1,8 +1,10 @@
-const roteador = require('express').Router()
+const roteador = require('express').Router({ mergeParams: true})
+const Tabela = require('./TabelaCartao')
 
 roteador.get('/', async (req, res) => {
+    const cartoes = await Tabela.listar(req.params.idUsuario)
     res.send(
-        JSON.stringify([])
+        JSON.stringify(cartoes)
     )
 })
 
