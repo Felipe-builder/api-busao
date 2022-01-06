@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const instancia = require('../../bando-de-dados')
+const instancia = require('../../banco-de-dados')
 
 const colunas = {
     usuario: {

@@ -76,4 +76,7 @@ roteador.delete('/:idUsuario', async (req, res, proximo) => {
     }
 })
 
+const roteadorCartoes = require('./cartoes')
+roteador.use('/:idUsuario/cartoes', roteadorCartoes)
+
 module.exports = roteador
