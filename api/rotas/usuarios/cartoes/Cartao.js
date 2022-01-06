@@ -1,4 +1,5 @@
 const Tabela = require('./TabelaCartao')
+const DadosNaoFornecidos = require('../../../erros/DadosNaoFornecidos')
 
 class Cartao {
     constructor({id, numero, nome, status, tipo, usuario, dtCriacao, dtAtualizacao, versao}){
@@ -63,6 +64,44 @@ class Cartao {
 
     apagar() {
         return Tabela.remover(this.id, this.usuario)
+    }
+
+    async atualizar() {
+        const dadosParaAtualizar = {}
+        if(typeof this.numero === 'string' && this.numero.length > 0){
+            dadosParaAtualizar.numero = this.numero
+        }
+
+        if(typeof this.nome === 'string' && this.nome.length > 0){
+            dadosParaAtualizar.nome = this.nome        
+        }
+        
+        const regex = /[0-9]/;
+        if(typeof this.status === 'string' && !regex.test(this.status)) {
+            if (['true', 'false'].includes(this.status.toLowerCase())) {
+                this.status = this.status.toLowerCase() == 'true' ? true : false
+            }
+        }
+        
+        if (typeof this.status === 'boolean') {
+            dadosParaAtualizar.status = this.status
+        }
+
+        if (typeof this.tipo === 'string') {
+            dadosParaAtualizar.tipo = this.tipo
+        }
+        
+        if(Object.keys(dadosParaAtualizar).length === 0){
+            throw new DadosNaoFornecidos()
+        }
+
+        return Tabela.atualizar(
+            {
+                id: this.id,
+                usuario: this.usuario
+            },
+            dadosParaAtualizar
+        )
     }
 }
 

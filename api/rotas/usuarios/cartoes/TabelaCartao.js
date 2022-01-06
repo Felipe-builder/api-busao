@@ -35,5 +35,13 @@ module.exports = {
                 usuario: idUsuario
             }
         })
+    },
+    atualizar(dadosDoCartao, dadosParaAtualizar){
+        return Modelo.update(
+            dadosParaAtualizar,
+            {
+                where: dadosDoCartao 
+            }
+        )
     }
 }

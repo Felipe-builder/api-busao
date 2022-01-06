@@ -70,4 +70,24 @@ roteador.get('/:id', async (req, res, proximo) => {
     }
 })
 
+roteador.put('/:id', async(req, res, proximo) => {
+    try {
+        const dados = Object.assign(
+            {},
+            req.body
+            ,
+            {
+                id: req.params.id,
+                usuario: req.usuario.id
+             }
+        )
+        const cartao = new Cartao(dados)
+        await cartao.atualizar()
+        res.status(204)
+        res.end()
+    } catch (erro) {
+        proximo(erro)
+    }
+})
+
 module.exports = roteador
