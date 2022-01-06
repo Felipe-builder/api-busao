@@ -13,7 +13,27 @@ class Cartao {
         this.versao = versao
     }
 
+    validar() {
+        if(typeof this.numero !== 'string' || this.numero.length === 0){
+            throw new Error('O campo titulo está inválido')
+        }
+
+        if(typeof this.nome !== 'string' || this.nome.length === 0){
+            throw new Error('O campo nome está inválido')
+        }
+        
+        if (['true', 'false'].includes(this.status.toLowerCase())) {
+            this.status = this.status.toLowerCase() == 'true' ? true : false
+        }
+        
+        if (typeof this.status !== 'boolean') {
+            throw new Error('O campo status está inválido')
+        }
+
+    }
+
     async criar() {
+        this.validar()
         const resultado = await Tabela.inserir({
             numero: this.numero,
             nome: this.nome,
@@ -27,6 +47,10 @@ class Cartao {
         this.dtAtualizacao = resultado.dtAtualizacao
         this.versao = resultado.versao
         
+    }
+
+    apagar() {
+        return Tabela.remover(this.id, this.usuario)
     }
 }
 

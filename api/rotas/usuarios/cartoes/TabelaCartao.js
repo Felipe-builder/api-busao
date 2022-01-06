@@ -10,5 +10,13 @@ module.exports = {
     },
     inserir(dados){
         return Modelo.create(dados)
+    },
+    remover(idCartao, idUsuario){
+        return Modelo.destroy({
+            where: {
+                id: idCartao,
+                usuario: idUsuario
+            }
+        })
     }
 }

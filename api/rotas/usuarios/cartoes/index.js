@@ -9,7 +9,7 @@ roteador.get('/', async (req, res) => {
     )
 })
 
-roteador.post('/', async (req, res) => {
+roteador.post('/', async (req, res, proximo) => {
     try {
         const idUsuario = req.params.idUsuario
         const corpo = req.body
@@ -21,10 +21,23 @@ roteador.post('/', async (req, res) => {
             JSON.stringify(cartao)
         )
     } catch(erro) {
-        res.status(400)
-        res.send(
-            JSON.stringify(erro)
-        )
+        proximo(erro)
+    }
+})
+
+roteador.delete('/:id', async (req, res, proximo) => {
+    try {
+        const dados = {
+            id: req.params.id,
+            usuario: req.params.idUsuario
+        }
+        
+        const cartao = new Cartao(dados)
+        await cartao.apagar()
+        res.status(204)
+        res.end()
+    } catch(erro) {
+        proximo(erro)
     }
 })
 
