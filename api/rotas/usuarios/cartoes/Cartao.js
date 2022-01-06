@@ -49,6 +49,18 @@ class Cartao {
         
     }
 
+    async carregarPorId(){
+        const cartao = await Tabela.carregarPorId(this.id, this.usuario)
+        this.numero = cartao.numero
+        this.nome = cartao.nome
+        this.status = cartao.status
+        this.tipo = cartao.tipo
+        this.usuario = cartao.usuario
+        this.dtCriacao = cartao.dtCriacao
+        this.dtAtualizacao = cartao.dtAtualizacao
+        this.versao = cartao.versao
+    }
+
     apagar() {
         return Tabela.remover(this.id, this.usuario)
     }

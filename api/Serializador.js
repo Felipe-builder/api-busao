@@ -18,9 +18,7 @@ class Serializador {
     }
 
     serializar(dados) {
-
         dados = this.filtrar(dados)
-
 
         if (this.contentType === 'application/json') {
             return this.json(dados)
@@ -69,6 +67,21 @@ class SerializadorUsuario extends Serializador {
     }
 }
 
+class SerialidadorCartao extends Serializador {
+    constructor(contentType, camposExtras) {
+        super()
+        this.contentType = contentType
+        this.camposPublicos = [
+            'id',
+            'nome',
+            'status',
+            'tipo'
+        ].concat(camposExtras || [])
+        this.tagSingular = 'cartao'
+        this.tagPlural = 'cartoes'
+    }
+}
+
 class SerializadorErro extends Serializador {
     constructor(contentType, camposExtras) {
         super()
@@ -85,6 +98,7 @@ class SerializadorErro extends Serializador {
 module.exports = {
     Serializador: Serializador,
     SerializadorUsuario: SerializadorUsuario,
+    SerialidadorCartao: SerialidadorCartao,
     SerializadorErro: SerializadorErro,
     formatosAceitos: ['application/json', 'application/xml']
 }

@@ -77,6 +77,19 @@ roteador.delete('/:idUsuario', async (req, res, proximo) => {
 })
 
 const roteadorCartoes = require('./cartoes')
-roteador.use('/:idUsuario/cartoes', roteadorCartoes)
+
+const verificarUsuario = async (req, res, proximo) => {
+    try {
+        const id = req.params.idUsuario
+        const usuario = new Usuario({ id: id })
+        await usuario.carregarPorId()
+        req.usuario = usuario
+        proximo()
+    } catch (erro) {
+        proximo(erro)
+    }
+}
+
+roteador.use('/:idUsuario/cartoes', verificarUsuario, roteadorCartoes)
 
 module.exports = roteador
