@@ -7,5 +7,8 @@ module.exports = {
                 usuario: idUsuario
             }
         })
+    },
+    inserir(dados){
+        return Modelo.create(dados)
     }
 }
